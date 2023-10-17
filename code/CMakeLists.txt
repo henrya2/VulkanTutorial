@@ -2,20 +2,53 @@ cmake_minimum_required (VERSION 3.8)
 
 project (VulkanTutorial)
 
-find_package (glfw3 REQUIRED)
-find_package (glm REQUIRED)
-find_package (Vulkan REQUIRED)
-find_package (tinyobjloader REQUIRED)
+# add dependencies
+include(cmake/CPM.cmake)
 
-find_package (PkgConfig)
-pkg_get_variable (STB_INCLUDEDIR stb includedir)
-if (NOT STB_INCLUDEDIR)
-  unset (STB_INCLUDEDIR)
-  find_path (STB_INCLUDEDIR stb_image.h PATH_SUFFIXES stb)
-endif ()
+#find_package (glfw3 REQUIRED)
+CPMAddPackage(
+    NAME GLFW
+    GITHUB_REPOSITORY glfw/glfw
+    GIT_TAG 3.3.8     
+	OPTIONS 
+	"GLFW_BUILD_TESTS OFF" 
+	"GLFW_BUILD_EXAMPLES OFF" 
+	"GLFW_BUILD_DOCS OFF" 
+	"GLFW_INSTALL OFF"
+	)
+CPMAddPackage("gh:g-truc/glm#master")
+find_package (Vulkan REQUIRED)
+CPMAddPackage("gh:tinyobjloader/tinyobjloader#release")
+
+CPMAddPackage(
+  NAME stb
+  GITHUB_REPOSITORY nothings/stb
+  GIT_TAG master
+  DOWNLOAD_ONLY YES
+)
+
+if (stb_ADDED)
+  # lua has no CMake support, so we create our own target
+  set(STB_INCLUDEDIR "${stb_SOURCE_DIR}/")
+  
+  #message("${stb_SOURCE_DIR}/")
+
+endif()
+
+#find_package (PkgConfig)
+#pkg_get_variable (STB_INCLUDEDIR stb includedir)
+#if (NOT STB_INCLUDEDIR)
+#  unset (STB_INCLUDEDIR)
+#  find_path (STB_INCLUDEDIR stb_image.h PATH_SUFFIXES stb)
+#endif ()
 if (NOT STB_INCLUDEDIR)
   message (FATAL_ERROR "stb_image.h not found")
 endif ()
+
+SET(ASSETS_HOMEPATH   ${CMAKE_CURRENT_SOURCE_DIR}/  CACHE PATH "This directory contains assets' home path")
+
+configure_file ("${CMAKE_CURRENT_SOURCE_DIR}/configs/config.h.in"
+            "${CMAKE_CURRENT_SOURCE_DIR}/config.h" )
 
 add_executable (glslang::validator IMPORTED)
 find_program (GLSLANG_VALIDATOR "glslangValidator" HINTS $ENV{VULKAN_SDK}/bin REQUIRED)
@@ -160,20 +193,23 @@ add_chapter (28_model_loading
   SHADER 27_shader_depth
   MODELS ../resources/viking_room.obj
   TEXTURES ../resources/viking_room.png
-  LIBS glm::glm tinyobjloader::tinyobjloader)
+  LIBS glm::glm tinyobjloader)
 
 add_chapter (29_mipmapping
   SHADER 27_shader_depth
   MODELS ../resources/viking_room.obj
   TEXTURES ../resources/viking_room.png
-  LIBS glm::glm tinyobjloader::tinyobjloader)
+  LIBS glm::glm tinyobjloader)
 
 add_chapter (30_multisampling
   SHADER 27_shader_depth
   MODELS ../resources/viking_room.obj
   TEXTURES ../resources/viking_room.png
-  LIBS glm::glm tinyobjloader::tinyobjloader)
+  LIBS glm::glm tinyobjloader)
 
 add_chapter (31_compute_shader
   SHADER 31_shader_compute
   LIBS glm::glm)
+  
+add_chapter (vulkan_tutorial_playground
+)
