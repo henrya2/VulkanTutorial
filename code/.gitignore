@@ -1,3 +1,4 @@
 CMakeLists.txt.user
-build
+/build
+/_cpmcache
 config.h
