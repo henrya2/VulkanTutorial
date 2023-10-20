@@ -10,7 +10,11 @@ struct AssetsPathInitializer
 {
 	AssetsPathInitializer(char* argv0)
 	{	
-		fs::current_path(fs::path(argv0).parent_path());
+		auto argv0Path = fs::path(argv0);
+		if (argv0Path.is_absolute())
+		{
+			fs::current_path(argv0Path.parent_path());
+		}
 
 		std::cout << "Initialized current path: " << fs::current_path() << std::endl;
 	}
