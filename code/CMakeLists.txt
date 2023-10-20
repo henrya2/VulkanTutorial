@@ -79,6 +79,12 @@ function (add_chapter CHAPTER_NAME)
   add_executable (${CHAPTER_NAME} ${CHAPTER_NAME}.cpp)
   set_target_properties (${CHAPTER_NAME} PROPERTIES
     RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/${CHAPTER_NAME})
+  set_target_properties (${CHAPTER_NAME} PROPERTIES
+    RUNTIME_OUTPUT_DIRECTORY_DEBUG ${CMAKE_BINARY_DIR}/${CHAPTER_NAME})		
+  set_target_properties (${CHAPTER_NAME} PROPERTIES
+    RUNTIME_OUTPUT_DIRECTORY_RELEASE ${CMAKE_BINARY_DIR}/${CHAPTER_NAME})	
+  set_target_properties (${CHAPTER_NAME} PROPERTIES
+    OUTPUT_NAME ${CHAPTER_NAME}_$<CONFIG>)		
   set_target_properties (${CHAPTER_NAME} PROPERTIES CXX_STANDARD 17)
   target_link_libraries (${CHAPTER_NAME} Vulkan::Vulkan glfw)
   target_include_directories (${CHAPTER_NAME} PRIVATE ${STB_INCLUDEDIR})
@@ -212,4 +218,5 @@ add_chapter (31_compute_shader
   LIBS glm::glm)
   
 add_chapter (vulkan_tutorial_playground
+  SHADER 09_shader_base
 )

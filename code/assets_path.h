@@ -8,10 +8,12 @@ namespace fs = std::filesystem;
 
 struct AssetsPathInitializer
 {
-	AssetsPathInitializer()
-	{
-		fs::current_path(ASSETS_HOMEPATH);
+	AssetsPathInitializer(char* argv0)
+	{	
+		fs::current_path(fs::path(argv0).parent_path());
 
 		std::cout << "Initialized current path: " << fs::current_path() << std::endl;
 	}
 };
+
+
