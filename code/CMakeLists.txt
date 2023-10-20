@@ -5,6 +5,12 @@ project (VulkanTutorial)
 # add dependencies
 include(cmake/CPM.cmake)
 
+set(CPM_SOURCE_CACHE
+    "${CMAKE_CURRENT_SOURCE_DIR}/_cpmcache"
+    CACHE PATH "Directory to download CPM dependencies"
+	FORCE
+)
+
 #find_package (glfw3 REQUIRED)
 CPMAddPackage(
     NAME GLFW
